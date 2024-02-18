@@ -1,5 +1,5 @@
 {
-  "version": "3",
+  "version": "2",
   "packages": {
     "specifiers": {
       "npm:@google/generative-ai": "npm:@google/generative-ai@0.2.1"
