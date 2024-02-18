@@ -23,21 +23,21 @@ if (Deno.env.has('GEMINI_API_KEY')) {
 //   topK: 16,
 // }
 
-// const safetySettings = [
-//   {
-//     category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-//     threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
-//   },
-//   {
-//     category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-//     threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-//   },
-// ]
+const safetySettings = [
+  {
+    category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+    threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+  },
+]
 
 const gemini = new GoogleGenerativeAI(apiKey).getGenerativeModel({
   model: 'gemini-pro',
   // generationConfig,
-  // safetySettings,
+  safetySettings,
 })
 
 export default gemini
