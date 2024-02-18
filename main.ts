@@ -1,5 +1,6 @@
-import { Hono, Context, HTTPException } from 'hono'
-import {logger} from 'hono/middleware'
+import { Hono, Context } from 'hono'
+import { logger } from 'hono/middleware.ts'
+import { HTTPException } from 'hono/http-exception.ts'
 import { generateResponse, history } from './prompt.ts'
 
 const app = new Hono()
@@ -13,9 +14,9 @@ app.get('/', (c: Context) => {
 app.post('/generate', generateResponse)
 app.post('/history', (c: Context) => c.json(history))
 
-app.onError((err: HTTPException, c: Context) => {
+app.onError((err: unknown, c: Context) => {
   console.error(err)
-  c.text('Internal Server Error', 500)
+  return c.text('Internal Server Error', 500)
 })
 
 Deno.serve(app.fetch)
