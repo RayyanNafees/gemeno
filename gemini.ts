@@ -1,12 +1,19 @@
-import { load } from 'https://deno.land/std@0.216.0/dotenv/mod.ts'
 import {
   GoogleGenerativeAI,
   HarmBlockThreshold,
   HarmCategory,
 } from 'npm:@google/generative-ai'
 
-const env = await load()
-const apiKey = env.GEMINI_API_KEY
+let apiKey: string
+
+if (Deno.env.has('GEMINI_API_KEY')) {
+  apiKey = Deno.env.get('GEMINI_API_KEY') || ''
+} else {
+  const { load } = await import('https://deno.land/std@0.216.0/dotenv/mod.ts')
+
+  const env = await load()
+  apiKey = env.GEMINI_API_KEY
+}
 
 // const generationConfig = {
 //   stopSequences: ['red'],
