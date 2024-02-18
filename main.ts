@@ -1,40 +1,21 @@
-import { Hono } from 'https://deno.land/x/hono@v4.0.4/mod.ts'
-import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from "npm:@google/generative-ai";
-import { load } from "https://deno.land/std@0.216.0/dotenv/mod.ts";
-
-const env = await load();
-const apiKey = env["GEMINI_API_KEY"];
-
-const generationConfig = {
-    stopSequences: ["red"],
-    maxOutputTokens: 200,
-    temperature: 0.9,
-    topP: 0.1,
-    topK: 16,
-  };
-}
-
-
-const safetySettings = [
-  {
-    category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-    threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
-  },
-  {
-    category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-  },
-];
-
-
-const genAI = new GoogleGenerativeAI(apiKey)
-const gemini = genAI.getGenerativeModel({ model: "gemini-pro",generationConfig, safetySettings });;
-
+import { Hono, Context, HTTPException } from 'hono'
+import {logger} from 'hono/middleware'
+import { generateResponse, history } from './prompt.ts'
 
 const app = new Hono()
 
-app.get('/', (c) => {
+app.use(logger())
+
+app.get('/', (c: Context) => {
   return c.text('Hello Hono!')
+})
+
+app.post('/generate', generateResponse)
+app.post('/history', (c: Context) => c.json(history))
+
+app.onError((err: HTTPException, c: Context) => {
+  console.error(err)
+  c.text('Internal Server Error', 500)
 })
 
 Deno.serve(app.fetch)
