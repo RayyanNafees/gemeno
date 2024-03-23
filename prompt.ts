@@ -1,4 +1,4 @@
-import { Context } from 'hono'
+import { Context } from 'https://deno.land/x/hono@v4.0.4/mod.ts'
 import gemini from './gemini.ts'
 
 export const history: string[] = []

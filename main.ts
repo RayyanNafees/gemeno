@@ -1,5 +1,5 @@
-import { Hono, Context } from 'hono'
-import { logger } from 'hono/middleware.ts'
+import { Hono, Context } from 'https://deno.land/x/hono@v4.0.4/mod.ts'
+import { logger } from 'https://deno.land/x/hono@v4.0.4/middleware.ts'
 import { generateResponse, history } from './prompt.ts'
 
 const app = new Hono()
